@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% block title %}Database{% endblock title %}
+{% block content %}
+<div class="container">
+    <br><br>
+    {% if messages %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {% for message in messages %}
+                {{ message }}
+                <br>
+            {% endfor %}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col">
+            <h5>Registered Owners</h5>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Owner Name</th>
+                        <th>Owner ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for indiv in indivs %}
+                        <tr>
+                            <td><a href="{% url 'update-vehicle-owner' indiv.pk %}">{{ indiv.registered_vehicle_owner }}</a></td>
+                            <td>{{ indiv.registered_owner_id }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <h5>Registered Vehicles</h5>
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Vehicle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vin in vins %}
+                        <tr>
+                            <td><a href="{% url 'update-vehicle' vin.pk %}">{{ vin }}</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

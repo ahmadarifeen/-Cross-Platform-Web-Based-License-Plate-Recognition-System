@@ -1,0 +1,62 @@
+{% extends 'base/base.html' %}
+{% block title %}{{indiv.registered_vehicle_owner}}{% endblock title %}
+{% block content %}
+	<div class="container" id="container">
+		<br><br>
+		{% if messages %}
+        	{% for message in messages %}
+		        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+		          {{message}}
+		          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		        </div>
+		    {% endfor %}
+		{% endif %}
+		<center id="name"><h4>{{indiv.registered_vehicle_owner}}</h4></center>
+		<form action="" method="POST" id="form"> {% csrf_token %}
+			{{form.as_table}}
+			<label for="ID"> Registered Owner ID: </label>
+			<input id="ID" class="form-control" type="text" value="{{indiv.registered_owner_id}}" disabled>
+			<br>
+			{% if user.role != 'Police' %}
+				<input class="btn btn-warning mt-1" type="submit" value="Update" name="">
+				<a href="{% url 'delete-vehicle-owner' owner_id %}" class='btn btn-danger mt-1'>Delete</a>
+				<a class="btn btn-success mt-1" href="{% url 'details' indiv.registered_owner_id %}">Print Detailed Report on {{indiv.registered_vehicle_owner}}</a>
+				<a class='btn btn-primary mt-1' href="{% url 'register-vehicle' indiv.pk %}">Register a New Vehicle for {{ indiv.registered_vehicle_owner }}</a>
+				
+			{% endif %}
+		</form>
+		<br>
+		<!-- <button onclick="printPage()" class='btn btn-danger'>Print</button><br> -->
+			<strong>Registered Owned Vehicle(s)</strong><br>
+			{% if vehicle %}
+				<ul id="ul">
+					{% for indV in vehicle %}
+						<li><div><b>City Name: </b>{{indV.city_name}}</div></li>
+						<li><div><b>Vehicle Classification: </b>{{indV.vehicle_classification}}</div></li>
+						<li><div><b>Vehicle Identification Number: </b><a href="{% url 'update-vehicle' indV %}">{{indV}}</a></div></li>
+						<li><div><b>Engine CC: </b>{{indV.engine_cc}}</div></li>
+						<li><div><b>Vehicle Brand: </b>{{indV.vehicle_brand}}</div></li>
+						<li><div><b>Vehicle Registered To: </b>{{ indV.registered_owner_id.registered_owner_id }}</div></li>
+						<br>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p><strong>{{indiv}}</strong> has NO Registered Vehicle</p>
+			{% endif %}
+		
+	</div>
+	<script type="text/javascript">
+		function printPage(){
+			// INSTANTIATING THE VARIABLES WHICH NEEDS TO BE PRINTED 
+			var div = document.getElementById('container').innerHTML;
+			var form = document.getElementById('form').innerHTML;
+			var ul = document.getElementById('ul').innerHTML;
+
+			// STORING THEM TO THE DIV
+			document.getElementById('container').innerHTML = name + form + ul;
+
+			// PRINT THE WINDOW WITH THE CHOSEN TAGS/ATTRIBUTE/ DATA
+			window.print();
+		}
+	</script>
+{% endblock content %}
